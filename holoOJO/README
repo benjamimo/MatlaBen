@@ -2,6 +2,8 @@ holoOJO
 
 A GUI for hologram manipulation with Matlab.
 
+To run the GUI execute hojoOJO.m.
+
 The routine supports phase and complex modulation using a blazed grating.  The user can choose the following types of beams:
 - LAGUERRE-GAUSSIAN
 - BESSEL BEAMS
