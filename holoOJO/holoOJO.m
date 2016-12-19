@@ -1,28 +1,23 @@
 function varargout = holoOJO(varargin)
 % HOLOOJO MATLAB code for holoOJO.fig
-%      HOLOOJO, by itself, creates a new HOLOOJO or raises the existing
-%      singleton*.
 %
-%      H = HOLOOJO returns the handle to a new HOLOOJO or the handle to
-%      the existing singleton*.
+% A GUI for hologram manipulation with Matlab.
 %
-%      HOLOOJO('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in HOLOOJO.M with the given input arguments.
+% To run the GUI just execute this script.
 %
-%      HOLOOJO('Property','Value',...) creates a new HOLOOJO or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before holoOJO_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to holoOJO_OpeningFcn via varargin.
+% The routine supports phase and complex modulation using a blazed grating.  
+% The user can choose the following % types of beams:
+% - LAGUERRE-GAUSSIAN
+% - BESSEL BEAMS
+% - FLAT-TOP
+% - USER DEFINED
+% 
+% Once the type of desired beam is selected, modify the parameters to suit 
+% your needs.  The "user defined"  option accepts any matlab function (in 
+% the path) with the coordinates X,Y,THETA or RHO.
 %
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help holoOJO
-
-% Last Modified by GUIDE v2.5 17-Dec-2016 14:08:28
+% BP
+% Last Modified 18 Dec 2016.
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
