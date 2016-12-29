@@ -384,10 +384,10 @@ sy=linspace(-Uy/2,Uy/2,Ny);
 [THETA, RHO]=cart2pol(X,Y);
 
 % Grating for the hologram
-gratinParam=handles.slider1.Value;
+gratinParam=get(handles.slider1,'Value');
 
 % Field for a Vortex beam
-if handles.radiobutton3.Value
+if get(handles.radiobutton3,'Value')
     m=str2num(get(handles.Topocharge,'String'));
     % r0=str2num(get(handles.Topocharge,'string'))/sqrt(abs(m)+1);
     r0=str2num(get(handles.BeamWaist,'String'));
@@ -395,7 +395,7 @@ if handles.radiobutton3.Value
 end
 
 % Field for a Bessel
-if handles.radiobutton4.Value
+if get(handles.radiobutton4,'Value')
     m=str2num(get(handles.edit4,'String'));
     kt=str2num(get(handles.edit5,'String'));
     delt=1-str2num(get(handles.edit6,'String'));
@@ -403,14 +403,14 @@ if handles.radiobutton4.Value
 end
 
 % Field for a flat-top
-if handles.radiobutton5.Value
+if get(handles.radiobutton5,'Value')
     bbeta=str2num(get(handles.edit7,'String'));
     r0=str2num(get(handles.edit8,'String'));
     Field=TopHat(bbeta,r0);
 end
 
 % User-defined field
-if handles.radiobutton6.Value
+if get(handles.radiobutton6,'Value')
     Field=eval(get(handles.edit9,'String'));
 end
 
@@ -420,11 +420,11 @@ scale=gratinParam/Ux;
 Nxx=ResC*scale;
 Nyy=0;
 
-if handles.radiobutton1.Value % phase only
+if get(handles.radiobutton1,'Value') % phase only
     g1=1;
 end
 
-if handles.radiobutton2.Value % phase and amplitud
+if get(handles.radiobutton2,'Value') % phase and amplitud
     g1=A1/max(max(A1));
 end
 
@@ -435,16 +435,16 @@ imagesc(HoloU(1:1:end,1:1:end));
 colormap gray;
 axis off;
 
-% figure(2),
-% imagesc(HoloU)
-% colormap gray;
-% axis equal;
-% axis off;
+figure(2),
+imagesc(HoloU)
+colormap gray;
+axis equal;
+axis off;
 
 % Fullscreen in the second display... java is preferred.
 % if usejava('jvm')
-fullscreen(HoloU,2);
-colormap gray;
+% fullscreen(HoloU,2);
+% colormap gray;
 % else
 % ResRes=get(0,'screensize');
 % P1=ResRes(3);
