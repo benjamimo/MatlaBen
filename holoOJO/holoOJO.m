@@ -435,16 +435,16 @@ imagesc(HoloU(1:1:end,1:1:end));
 colormap gray;
 axis off;
 
-figure(2),
-imagesc(HoloU)
-colormap gray;
-axis equal;
-axis off;
+%figure(2),
+%imagesc(HoloU)
+%colormap gray;
+%axis equal;
+%axis off;
 
 % Fullscreen in the second display... java is preferred.
 % if usejava('jvm')
-% fullscreen(HoloU,2);
-% colormap gray;
+fullscreen(HoloU,2);
+colormap gray;
 % else
 % ResRes=get(0,'screensize');
 % P1=ResRes(3);
