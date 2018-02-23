@@ -619,6 +619,104 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
+% --- Executes on slider movement.
+function slider3_Callback(hObject, eventdata, handles)
+% hObject    handle to slider3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+sliderVal3=get(hObject,'Value');
+assignin('base','sliderVal',sliderVal3);
+set(handles.edit20,'String',num2str(sliderVal3));
+updateAxes(handles);
+
+% --- Executes during object creation, after setting all properties.
+function slider3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+
+function edit20_Callback(hObject, eventdata, handles)
+% hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit20 as text
+%        str2double(get(hObject,'String')) returns contents of edit20 as a double
+edit20=get(hObject,'String');
+set(handles.slider3,'Value',str2num(edit20));
+updateAxes(handles);
+
+% --- Executes during object creation, after setting all properties.
+function edit20_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function edit21_Callback(hObject, eventdata, handles)
+% hObject    handle to edit21 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit21 as text
+%        str2double(get(hObject,'String')) returns contents of edit21 as a double
+edit21=get(hObject,'String');
+set(handles.slider4,'Value',str2num(edit21));
+updateAxes(handles);
+
+% --- Executes during object creation, after setting all properties.
+function edit21_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit21 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on slider movement.
+function slider4_Callback(hObject, eventdata, handles)
+% hObject    handle to slider4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+sliderVal4=get(hObject,'Value');
+assignin('base','sliderVal',sliderVal4);
+set(handles.edit21,'String',num2str(sliderVal4));
+updateAxes(handles);
+
+% --- Executes during object creation, after setting all properties.
+function slider4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
 function updateAxes(handles)
 % SLM dimensions
 ResR=1*1080;  % pixels, add +1 for simulation reasons, if you want to generate the hologram change to +0
@@ -638,8 +736,10 @@ sy=linspace(-Uy/2,Uy/2,Ny);
 [THETA, RHO]=cart2pol(X,Y);
 
 % Grating for the hologram
-gratinParamL=get(handles.slider1,'Value');
-gratinParamR=get(handles.slider2,'Value');
+gratinParamLx=get(handles.slider1,'Value');
+gratinParamLy=get(handles.slider3,'Value');
+gratinParamRx=get(handles.slider2,'Value');
+gratinParamRy=get(handles.slider4,'Value');
 
 % Spiral parameters
 gamm=str2num(get(handles.edit14,'String'));
@@ -656,17 +756,22 @@ if get(handles.radiobutton3,'Value')
     xL=str2num(get(handles.edit16,'String'));
     yL=str2num(get(handles.edit17,'String'));
     
-    FieldL= (alf-1i.*bet).*LG(X-xL,Y-yL,mL,r0L);
+    LL=LG(X-xL,Y-yL,mL,r0L);
+    LL=LL./max(LL(:));
+    FieldL= (alf-1i.*bet).*LL;
     
     PhaseL=angle(FieldL);
     A1L=abs(FieldL);
-    scaleL=gratinParamL/Ux;
-    Nxx=ResC*scaleL;
-    Nyy=0;
+    scaleLx=gratinParamLx/Ux;
+    scaleLy=gratinParamLy/Uy;
+    Nxx=ResC*scaleLx;
+    Nyy=ResC*scaleLy;
     g1L=A1L/max(max(A1L));
 
-    HoloL=g1L.*(mod(PhaseL+(Nxx.*X+Nyy.*Y),2*pi)/pi-1)+1;
-    HoloL=HoloL/max(HoloL(:));
+%     HoloL=g1L.*(mod(PhaseL+(Nxx.*X+Nyy.*Y),2*pi)-pi);
+    HoloL=A1L.*(mod(PhaseL+(Nxx.*X+Nyy.*Y),2*pi)/pi-1)+1;
+%     HoloL=HoloL/max(HoloL(:));
+%     HoloL=HoloL/max(HoloL(:));
 end
 
 % Field for a Vortex beam RIGHT side
@@ -677,29 +782,35 @@ if get(handles.radiobutton10,'Value')
     r0R=str2num(get(handles.edit10,'String'));
     xR=str2num(get(handles.edit18,'String'));
     yR=str2num(get(handles.edit19,'String'));
-        
-    FieldR= (alf+1i.*bet).*LG(X-xR,Y-yR,mR,r0R);
+    
+    RR=LG(X-xR,Y-yR,mR,r0R);
+    RR=RR./max(RR(:));
+    FieldR= (alf+1i.*bet).*RR;
     
     PhaseR=angle(FieldR);
     A1R=abs(FieldR);
-    scaleR=gratinParamR/Ux;
-    Nxx=ResC*scaleR;
-    Nyy=0;
+    scaleRx=gratinParamRx/Ux;
+    scaleRy=gratinParamRy/Uy;
+    Nxx=ResC*scaleRx;
+    Nyy=ResC*scaleRy;
     g1R=A1R/max(max(A1R));
 
-    HoloR=g1R.*(mod(PhaseR+(Nxx.*X+Nyy.*Y),2*pi)/pi-1)+1;
-    HoloR=HoloR/max(HoloR(:));
+%     HoloR=g1R.*(mod(PhaseR+(Nxx.*X+Nyy.*Y),2*pi)-pi);    
+    HoloR=A1R.*(mod(PhaseR+(Nxx.*X+Nyy.*Y),2*pi)/pi-1)+1;
+%     HoloR=HoloR/max(HoloR(:));
+%     HoloR=HoloR/max(HoloR(:));
 end
 
 % User-defined field LEFT
 if get(handles.radiobutton6,'Value')
     FieldL=eval(get(handles.edit9,'String'));
-    
+
     PhaseL=angle(FieldL);
     A1L=abs(FieldL);
-    scaleL=gratinParamL/Ux;
-    Nxx=ResC*scaleL;
-    Nyy=0;
+    scaleLx=gratinParamLx/Ux;
+    scaleLy=gratinParamLy/Uy;
+    Nxx=ResC*scaleLx;
+    Nyy=ResC*scaleLy;
     g1L=A1L/max(max(A1L));
 
     HoloL=g1L.*(mod(PhaseL+(Nxx.*X+Nyy.*Y),2*pi)/pi-1)+1;
@@ -708,13 +819,14 @@ end
 
 % User-defined field RIGHT
 if get(handles.radiobutton11,'Value')
-    FieldR=eval(get(handles.edit9,'String'));
-   
+    FieldR=eval(get(handles.edit12,'String'));
+    
     PhaseR=angle(FieldR);
     A1R=abs(FieldR);
-    scaleR=gratinParamR/Ux;
-    Nxx=ResC*scaleR;
-    Nyy=0;
+    scaleRx=gratinParamRx/Ux;
+    scaleRy=gratinParamRy/Uy;
+    Nxx=ResC*scaleRx;
+    Nyy=ResC*scaleRy;
     g1R=A1R/max(max(A1R));
 
     HoloR=g1R.*(mod(PhaseR+(Nxx.*X+Nyy.*Y),2*pi)/pi-1)+1;
@@ -723,6 +835,8 @@ end
 
 % Concatenate holograms
 HoloU=[HoloL, HoloR];
+HoloU=HoloU./max(HoloU(:)) + 0.5;
+HoloU=HoloU./max(HoloU(:));
 
 axes(handles.axes1);
 imagesc(HoloU(1:1:end,1:1:end));
@@ -733,13 +847,13 @@ axes(handles.axes2);
 % imagesc(abs(Field));
 % colormap gray;
 axis off;
-
+% 
 % figure(2),
 % imagesc(HoloU)
 % colormap gray;
 % axis equal;
 % axis off;
 
-% Display in SLM
+% % Display in SLM
 fullscreen(HoloU,2);
-colormap gray;
+% colormap gray;
